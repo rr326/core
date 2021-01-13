@@ -115,6 +115,7 @@ FLOWS = [
     "local_ip",
     "locative",
     "logi_circle",
+    "lovelace_notify",
     "luftdaten",
     "mailgun",
     "melcloud",
