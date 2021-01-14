@@ -1,39 +1,1567 @@
-{
-  "config": {
-    "step": {
-      "on_supervisor": {
-        "title": "Select connection method",
-        "description": "Do you want to use the OpenZWave Supervisor add-on?",
-        "data": { "use_addon": "Use the OpenZWave Supervisor add-on" }
-      },
-      "install_addon": {
-        "title": "The OpenZWave add-on installation has started"
-      },
-      "start_addon": {
-        "title": "Enter the OpenZWave add-on configuration",
-        "data": {
-          "usb_path": "[%key:common::config_flow::data::usb_path%]",
-          "network_key": "Network Key"
-        }
-      },
-      "hassio_confirm": {
-        "title": "Set up OpenZWave integration with the OpenZWave add-on"
+title: Seattle Home Dashboard
+views:
+  #
+  # View: Overview
+  #
+  - title: Overview
+    path: Overview
+    badges: []
+    cards:
+      #
+      # Component: Main Actions & Status
+      #
+      - type: vertical-stack
+        cards:
+          # Level 1: Home Mode, Gentle Wakeup
+          - type: horizontal-stack
+            cards:
+              - type: "custom:button-card"
+                entity: input_select.home_state
+                icon: mdi:home
+                card_size: 1
+                name: Home Mode
+                show_state: true
+                color_type: card
+                tap_action:
+                  action: call-service
+                  service: input_select.select_option
+                  service_data:
+                    entity_id: input_select.home_state
+                    option: >
+                      [
+  [
+    [
+                        if (entity.state === "Home") {
+                          return "Away"
+      } else {
+                          return "Home"
       }
-    },
-    "abort": {
-      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
-      "already_in_progress": "[%key:common::config_flow::abort::already_in_progress%]",
-      "addon_info_failed": "Failed to get OpenZWave add-on info.",
-      "addon_install_failed": "Failed to install the OpenZWave add-on.",
-      "addon_set_config_failed": "Failed to set OpenZWave configuration.",
-      "single_instance_allowed": "[%key:common::config_flow::abort::single_instance_allowed%]",
-      "mqtt_required": "The MQTT integration is not set up"
-    },
-    "error": {
-      "addon_start_failed": "Failed to start the OpenZWave add-on. Check the configuration."
-    },
-    "progress": {
-      "install_addon": "Please wait while the OpenZWave add-on installation finishes. This can take several minutes."
-    }
-  }
+    ]
+  ]
+]
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - color: black
+                state:
+                  - value: "Home"
+                    styles:
+                      card:
+                        - background-color: green
+                  - value: "Away"
+                    styles:
+                      card:
+                        - background-color: yellow
+
+              - type: "custom:button-card"
+                entity: input_boolean.gentle_wakeup
+                icon: mdi:alarm-multiple
+                card_size: 1
+                name: Gentle Wakeup
+                show_state: true
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - color: black
+                state:
+                  - value: "on"
+                    styles:
+                      card:
+                        - background-color: green
+                  - value: "off"
+                    styles:
+                      card:
+                        - background-color: yellow
+
+          # Level 2 - Haven Heat On, Haven Turn Heat Off
+          - type: horizontal-stack
+            cards:
+              - type: "custom:button-card"
+                entity: app.autoclimate_state
+                icon: mdi:pine-tree
+                card_size: 1
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - color: black
+                state:
+                  - value: "on"
+                    styles:
+                      card:
+                        - background-color: red
+                    name: "Haven Heat<br>On"
+                  - value: "offline"
+                    styles:
+                      card:
+                        - background-color: yellow
+                    name: "Haven Heat<br>Offline"
+                  - value: "off"
+                    styles:
+                      card:
+                        - background-color: green
+                    name: "Haven Heat<br>Off"
+
+              - type: "custom:button-card"
+                entity: app.autoclimate_heat_state
+                icon: mdi:light-switch
+                card_size: 1
+                name: Haven Heat<br> Turn Off
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - background-color: "#2babf0"
+                    - color: black
+                tap_action:
+                  action: call-service
+                  service: script.fire_event_autoclimate_turn_off_all
+
+          # Level 3 - Haven Temperatures
+          - type: horizontal-stack
+            cards:
+              - type: custom:bignumber-card
+                title: Haven
+                entity: sensor.autoclimate_cabin_temperature
+                scale: 21px
+                noneString: Offline
+                noneCardClass: "none-card-class"
+                round: 0
+                style: |
+                  #value {
+                    color: black;
 }
+
+                  #title {
+                    color: black
+}
+                  .none-card-class {
+                    background-color: yellow;
+}
+
+                  ha-card {
+                      background-color: {
+    { state_attr('app.dashboard_colors', 'climate.cabin')
+    }
+  };
+}
+
+              - type: custom:bignumber-card
+                title: Bathroom
+                entity: sensor.autoclimate_master_bath_floor_heater_temperature
+                scale: 21px
+                noneString: Offline
+                noneCardClass: "none-card-class"
+                round: 0
+                style: |
+                  #value {
+                    color: black;
+}
+
+                  #title {
+                    color: black
+}
+                  .none-card-class {
+                    background-color: yellow;
+}
+
+                  ha-card {
+                      background-color: {
+    { state_attr('app.dashboard_colors', 'climate.master_bath_floor_heater')
+    }
+  };
+}
+              - type: custom:bignumber-card
+                title: TV Room
+                entity: sensor.autoclimate_tv_room_temperature
+                scale: 21px
+                noneString: Offline
+                noneCardClass: "none-card-class"
+                round: 0
+                style: |
+                  #value {
+                    color: black;
+}
+                  #title {
+                    color: black
+}
+                  .none-card-class {
+                    background-color: yellow;
+}
+                  ha-card {
+                      background-color: {
+    { state_attr('app.dashboard_colors', 'climate.tv_room')
+    }
+  };
+}
+              - type: custom:bignumber-card
+                title: Gym
+                entity: sensor.autoclimate_gym_temperature
+                scale: 21px
+                noneString: Offline
+                noneCardClass: "none-card-class"
+                round: 0
+                style: |
+                  #value {
+                    color: black;
+}
+
+                  #title {
+                    color: black
+}
+                  .none-card-class {
+                    background-color: yellow;
+}
+                  ha-card {
+                      background-color: {
+    { state_attr('app.dashboard_colors', 'climate.gym')
+    }
+  };
+}
+
+          # Level 4: Other actions (TBD)
+          - type: horizontal-stack
+            cards:
+              - type: "custom:button-card"
+                entity: input_boolean.trigger_all_off
+                icon: mdi:light-switch
+                card_size: 1
+                name: All Off
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - background-color: "#2babf0"
+                    - color: black
+                tap_action:
+                  action: call-service
+                  service: mqtt.publish
+                  service_data:
+                    topic: "trigger/all_off"
+                    payload: ""
+
+              - type: "custom:button-card"
+                entity: input_boolean.trigger_all_media_off
+                icon: mdi:light-switch
+                card_size: 1
+                name: Sonos Off
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - background-color: "#2babf0"
+                    - color: black
+                tap_action:
+                  action: call-service
+                  service: mqtt.publish
+                  service_data:
+                    topic: "trigger/all_media_off"
+                    payload: ""
+
+              - type: "custom:button-card"
+                entity: input_boolean.trigger_all_lights_off
+                icon: mdi:light-switch
+                card_size: 1
+                name: Lights Off
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - background-color: "#2babf0"
+                    - color: black
+                tap_action:
+                  action: call-service
+                  service: mqtt.publish
+                  service_data:
+                    topic: "trigger/all_lights_off"
+                    payload: ""
+
+          # Level 5: Sonos Buttons
+          - type: horizontal-stack
+            cards:
+              - type: "custom:button-card"
+                entity: media_player.office
+                icon: mdi:speaker
+                card_size: 1
+                name: Office
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - background-color: white
+                    - color: black
+                state:
+                  - value: "playing"
+                    styles:
+                      card:
+                        - background-color: yellow
+                tap_action:
+                  action: call-service
+                  service: media_player.media_pause
+                  service_data:
+                    entity_id: media_player.office
+              - type: "custom:button-card"
+                entity: media_player.family_room
+                icon: mdi:speaker
+                card_size: 1
+                name: Family
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - background-color: white
+                    - color: black
+                state:
+                  - value: "playing"
+                    styles:
+                      card:
+                        - background-color: yellow
+                tap_action:
+                  action: call-service
+                  service: media_player.media_pause
+                  service_data:
+                    entity_id: media_player.family_room
+              - type: "custom:button-card"
+                entity: media_player.kestrel_room
+                icon: mdi:speaker
+                card_size: 1
+                name: Kestrel
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - background-color: white
+                    - color: black
+                state:
+                  - value: "playing"
+                    styles:
+                      card:
+                        - background-color: yellow
+                tap_action:
+                  action: call-service
+                  service: media_player.media_pause
+                  service_data:
+                    entity_id: media_player.kestrel_room
+              - type: "custom:button-card"
+                entity: media_player.marley_room
+                icon: mdi:speaker
+                card_size: 1
+                name: Marley
+                color_type: card
+                styles:
+                  name:
+                    - font-size: 20px
+                    - font-weight: bold
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - background-color: white
+                    - color: black
+                state:
+                  - value: "playing"
+                    styles:
+                      card:
+                        - background-color: yellow
+                tap_action:
+                  action: call-service
+                  service: media_player.media_pause
+                  service_data:
+                    entity_id: media_player.marley_room
+
+        # TestApp Button
+
+        # - type: "custom:button-card"
+        #   entity: app.test_app
+        #   icon: mdi:flash
+        #   card_size: 1
+        #   name: Test app.test_app entity
+        #   color_type: card
+        #   show_state: true
+        #   styles:
+        #     name:
+        #       - font-size: 20px
+        #       - font-weight: bold
+        #     card:
+        #       - font-size: 12px
+        #       - font-weight: bold
+        #       - background-color: orange
+        #   tap_action:
+        #     action: call-service
+        #     service: mqtt.publish
+        #     service_data:
+        #       #  topic: "mq_test_button"
+        #       topic: 'app.test_app/triggered'
+        #       payload: |
+        #         {
+  "TestPayload": "anything"
+}
+      #
+      # Component: Seattle Weather & Thermostat
+      #
+      - type: custom:stack-in-card
+        cards:
+          - type: markdown
+            content: |
+              # Seattle
+              ## Weather
+          - type: weather-forecast
+            entity: weather.seattle # NWS: weather.kbfi_daynight
+            show_forecast: true
+            secondary_info_attribute: precipitation
+          - type: markdown
+            content: |
+              ---
+              ## Thermostat
+          - type: custom:simple-thermostat
+            entity: climate.seattle
+            step_layout: column
+            icon: true
+            control: true
+            name: false
+            decimals: 0
+            style: |
+              .sensor-value {
+                font-size: 30px;
+                font-weight: 900;
+}
+
+              ha-card {
+                --st-font-size-xl: 30px;
+
+      #
+      # Component: Entities
+      #
+      - type: entities
+        title: Outside Lights
+        entities:
+          - entity: group.front
+          - entity: group.back
+          - entity: group.outside
+        style: |
+          ha-card {
+            background-color: #2babf0;
+            color: black;
+  }
+          .card-content {
+            background: rgba(0,
+    0,
+    0,
+    0.3);
+            font-size: 1.3em;
+  }
+
+      #
+      # Component: All Entities
+      #
+      - type: custom:auto-entities
+        card:
+          type: glance
+          show_state: false
+          columns: 3
+          title: All Lights & Switches
+        filter:
+          include:
+            - domain: light
+              options:
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                double_tap_action:
+                  action: more-info
+            - domain: switch
+              options:
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                double_tap_action:
+                  action: more-info
+          exclude:
+            - entity_id: "*wallmote*" # Wallmote
+        sort:
+          method: name
+          ignore_case: true
+
+
+  ##################################################################
+  ##################################################################
+  ##################################################################
+
+  #
+  # View: Details
+  #
+  - title: Details
+    path: Details
+    badges:
+      - entity: sensor.seattle_temperature
+      - entity: sensor.cabin_temperature
+      - entity: sensor.gym_temperature
+      - entity: sensor.tv_room_temperature
+      - entity: sun.sun
+    cards:
+      #
+      # Component: Thermostats
+      #
+      - type: custom:stack-in-card
+        cards:
+          - type: markdown
+            content: |
+              # Thermostats
+          - type: custom:simple-thermostat
+            entity: climate.seattle
+            step_layout: column
+            decimals: 0
+          - type: custom:simple-thermostat
+            name: Haven
+            entity: climate.cabin
+            step_layout: column
+            decimals: 0
+          - type: custom:simple-thermostat
+            entity: climate.master_bath_floor_heater
+            name: Haven Floor
+            step_layout: column
+            decimals: 0
+          - type: custom:simple-thermostat
+            entity: climate.gym
+            step_layout: column
+            decimals: 0
+          - type: custom:simple-thermostat
+            entity: climate.tv_room
+            step_layout: column
+            decimals: 0
+
+      #
+      # Component: All Entities
+      #
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_state: false
+          title: Entities
+        filter:
+          include:
+            - domain: light
+            - domain: switch
+            - domain: lock
+          exclude:
+            - entity_id: "*wallmote*" # Wallmote
+        sort:
+          method: name
+          ignore_case: true
+
+      #
+      # States
+      #
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_state: false
+          show_name: false
+          title: States
+        filter:
+          include:
+            - domain: "input_boolean"
+            - domain: "input_select"
+          exclude:
+            - entity_id: "*autoclimate_turn_heat_off"
+            - entity_id: "*trigger*"
+        sort:
+          method: name
+          ignore_case: true
+
+      #
+      # App States
+      #
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_state: false
+          show_name: false
+          title: App States
+        filter:
+          include:
+            - domain: "app"
+        sort:
+          method: name
+          ignore_case: true
+
+      #
+      # Component: Sonos
+      #
+      - type: custom:stack-in-card
+        cards:
+          - type: markdown
+            content: |
+              # Sonos
+          - type: media-control
+            entity: media_player.family_room
+          - type: media-control
+            entity: media_player.kestrel_room
+          - type: media-control
+            entity: media_player.living_room
+          - type: media-control
+            entity: media_player.marley_room
+          - type: media-control
+            entity: media_player.office
+          - type: media-control
+            entity: media_player.tv_room
+
+  ##################################################################
+  ##################################################################
+  ##################################################################
+
+  #
+  # View: Details
+  #
+  - title: History
+    path: History
+    badges:
+    cards:
+      #
+      # Component: Temperature History
+      #
+      - type: custom:stack-in-card
+        cards:
+          - type: markdown
+            content: |
+              # Temperature History (1 week)
+          - type: history-graph
+            title: Seattle
+            hours_to_show: 168
+            entities:
+              - sensor.seattle_temperature
+          - type: history-graph
+            title: Haven
+            hours_to_show: 168
+            entities:
+              - sensor.cabin_temperature
+          - type: history-graph
+            title: Gym
+            hours_to_show: 168
+            entities:
+              - sensor.gym_temperature
+          - type: history-graph
+            title: TV Room
+            hours_to_show: 168
+            entities:
+              - sensor.tv_room_temperature
+          - type: history-graph
+            title: Bathroom Floor
+            hours_to_show: 168
+            entities:
+              - sensor.master_bath_floor_heater_temperature
+      #
+      # Component: Temperature History Using Autoclimate Sensors
+      #
+      - type: custom:stack-in-card
+        cards:
+          - type: markdown
+            content: |
+              # Temperature History (1 week)
+          - type: history-graph
+            title: Seattle
+            hours_to_show: 168
+            entities:
+              - sensor.autoclimate_seattle_temperature
+          - type: history-graph
+            title: Haven
+            hours_to_show: 168
+            entities:
+              - sensor.autoclimate_cabin_temperature
+          - type: history-graph
+            title: Gym
+            hours_to_show: 168
+            entities:
+              - sensor.autoclimate_gym_temperature
+          - type: history-graph
+            title: TV Room
+            hours_to_show: 168
+            entities:
+              - sensor.autoclimate_tv_room_temperature
+          - type: history-graph
+            title: Bathroom Floor
+            hours_to_show: 168
+            entities:
+              - sensor.autoclimate_master_bath_floor_heater_temperature
+      #
+
+      #
+      # Component: Key Entity History
+      #
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 168
+          show_state: false
+          title: Entity History (1 week)
+        filter:
+          include:
+            - domain: light
+            - domain: switch
+            - domain: lock
+          exclude:
+            - entity_id: "*wallmote*" # Wallmote
+        sort:
+          method: name
+          ignore_case: true
+
+      #
+      # Component: Occpancy History
+      #
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 168
+          show_state: false
+          title: Haven History (1 week)
+        filter:
+          include:
+            - entity_id: "binary_sensor.*_occupancy"
+        sort:
+          method: name
+          ignore_case: truetitle: Seattle Home Dashboard
+          views:
+            #
+            # View: Overview
+            #
+            - title: Overview
+              path: Overview
+              badges: []
+              cards:
+                #
+                # Component: Main Actions & Status
+                #
+                - type: vertical-stack
+                  cards:
+                    # Level 1: Home Mode, Gentle Wakeup
+                    - type: horizontal-stack
+                      cards:
+                        - type: "custom:button-card"
+                          entity: input_select.home_state
+                          icon: mdi:home
+                          card_size: 1
+                          name: Home Mode
+                          show_state: true
+                          color_type: card
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.home_state
+                              option: >
+                                [
+    [
+      [
+                                  if (entity.state === "Home") {
+                                    return "Away"
+        } else {
+                                    return "Home"
+        }
+      ]
+    ]
+  ]
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - color: black
+                          state:
+                            - value: "Home"
+                              styles:
+                                card:
+                                  - background-color: green
+                            - value: "Away"
+                              styles:
+                                card:
+                                  - background-color: yellow
+
+                        - type: "custom:button-card"
+                          entity: input_boolean.gentle_wakeup
+                          icon: mdi:alarm-multiple
+                          card_size: 1
+                          name: Gentle Wakeup
+                          show_state: true
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - color: black
+                          state:
+                            - value: "on"
+                              styles:
+                                card:
+                                  - background-color: green
+                            - value: "off"
+                              styles:
+                                card:
+                                  - background-color: yellow
+
+                    # Level 2 - Haven Heat On, Haven Turn Heat Off
+                    - type: horizontal-stack
+                      cards:
+                        - type: "custom:button-card"
+                          entity: app.autoclimate_state
+                          icon: mdi:pine-tree
+                          card_size: 1
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - color: black
+                          state:
+                            - value: "on"
+                              styles:
+                                card:
+                                  - background-color: red
+                              name: "Haven Heat<br>On"
+                            - value: "offline"
+                              styles:
+                                card:
+                                  - background-color: yellow
+                              name: "Haven Heat<br>Offline"
+                            - value: "off"
+                              styles:
+                                card:
+                                  - background-color: green
+                              name: "Haven Heat<br>Off"
+
+                        - type: "custom:button-card"
+                          entity: app.autoclimate_heat_state
+                          icon: mdi:light-switch
+                          card_size: 1
+                          name: Haven Heat<br> Turn Off
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - background-color: "#2babf0"
+                              - color: black
+                          tap_action:
+                            action: call-service
+                            service: script.fire_event_autoclimate_turn_off_all
+
+                    # Level 3 - Haven Temperatures
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:bignumber-card
+                          title: Haven
+                          entity: sensor.autoclimate_cabin_temperature
+                          scale: 21px
+                          noneString: Offline
+                          noneCardClass: "none-card-class"
+                          round: 0
+                          style: |
+                            #value {
+                              color: black;
+  }
+
+                            #title {
+                              color: black
+  }
+                            .none-card-class {
+                              background-color: yellow;
+  }
+
+                            ha-card {
+                                background-color: {
+      { state_attr('app.dashboard_colors', 'climate.cabin')
+      }
+    };
+  }
+
+                        - type: custom:bignumber-card
+                          title: Bathroom
+                          entity: sensor.autoclimate_master_bath_floor_heater_temperature
+                          scale: 21px
+                          noneString: Offline
+                          noneCardClass: "none-card-class"
+                          round: 0
+                          style: |
+                            #value {
+                              color: black;
+  }
+
+                            #title {
+                              color: black
+  }
+                            .none-card-class {
+                              background-color: yellow;
+  }
+
+                            ha-card {
+                                background-color: {
+      { state_attr('app.dashboard_colors', 'climate.master_bath_floor_heater')
+      }
+    };
+  }
+                        - type: custom:bignumber-card
+                          title: TV Room
+                          entity: sensor.autoclimate_tv_room_temperature
+                          scale: 21px
+                          noneString: Offline
+                          noneCardClass: "none-card-class"
+                          round: 0
+                          style: |
+                            #value {
+                              color: black;
+  }
+                            #title {
+                              color: black
+  }
+                            .none-card-class {
+                              background-color: yellow;
+  }
+                            ha-card {
+                                background-color: {
+      { state_attr('app.dashboard_colors', 'climate.tv_room')
+      }
+    };
+  }
+                        - type: custom:bignumber-card
+                          title: Gym
+                          entity: sensor.autoclimate_gym_temperature
+                          scale: 21px
+                          noneString: Offline
+                          noneCardClass: "none-card-class"
+                          round: 0
+                          style: |
+                            #value {
+                              color: black;
+  }
+
+                            #title {
+                              color: black
+  }
+                            .none-card-class {
+                              background-color: yellow;
+  }
+                            ha-card {
+                                background-color: {
+      { state_attr('app.dashboard_colors', 'climate.gym')
+      }
+    };
+  }
+
+                    # Level 4: Other actions (TBD)
+                    - type: horizontal-stack
+                      cards:
+                        - type: "custom:button-card"
+                          entity: input_boolean.trigger_all_off
+                          icon: mdi:light-switch
+                          card_size: 1
+                          name: All Off
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - background-color: "#2babf0"
+                              - color: black
+                          tap_action:
+                            action: call-service
+                            service: mqtt.publish
+                            service_data:
+                              topic: "trigger/all_off"
+                              payload: ""
+
+                        - type: "custom:button-card"
+                          entity: input_boolean.trigger_all_media_off
+                          icon: mdi:light-switch
+                          card_size: 1
+                          name: Sonos Off
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - background-color: "#2babf0"
+                              - color: black
+                          tap_action:
+                            action: call-service
+                            service: mqtt.publish
+                            service_data:
+                              topic: "trigger/all_media_off"
+                              payload: ""
+
+                        - type: "custom:button-card"
+                          entity: input_boolean.trigger_all_lights_off
+                          icon: mdi:light-switch
+                          card_size: 1
+                          name: Lights Off
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - background-color: "#2babf0"
+                              - color: black
+                          tap_action:
+                            action: call-service
+                            service: mqtt.publish
+                            service_data:
+                              topic: "trigger/all_lights_off"
+                              payload: ""
+
+                    # Level 5: Sonos Buttons
+                    - type: horizontal-stack
+                      cards:
+                        - type: "custom:button-card"
+                          entity: media_player.office
+                          icon: mdi:speaker
+                          card_size: 1
+                          name: Office
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - background-color: white
+                              - color: black
+                          state:
+                            - value: "playing"
+                              styles:
+                                card:
+                                  - background-color: yellow
+                          tap_action:
+                            action: call-service
+                            service: media_player.media_pause
+                            service_data:
+                              entity_id: media_player.office
+                        - type: "custom:button-card"
+                          entity: media_player.family_room
+                          icon: mdi:speaker
+                          card_size: 1
+                          name: Family
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - background-color: white
+                              - color: black
+                          state:
+                            - value: "playing"
+                              styles:
+                                card:
+                                  - background-color: yellow
+                          tap_action:
+                            action: call-service
+                            service: media_player.media_pause
+                            service_data:
+                              entity_id: media_player.family_room
+                        - type: "custom:button-card"
+                          entity: media_player.kestrel_room
+                          icon: mdi:speaker
+                          card_size: 1
+                          name: Kestrel
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - background-color: white
+                              - color: black
+                          state:
+                            - value: "playing"
+                              styles:
+                                card:
+                                  - background-color: yellow
+                          tap_action:
+                            action: call-service
+                            service: media_player.media_pause
+                            service_data:
+                              entity_id: media_player.kestrel_room
+                        - type: "custom:button-card"
+                          entity: media_player.marley_room
+                          icon: mdi:speaker
+                          card_size: 1
+                          name: Marley
+                          color_type: card
+                          styles:
+                            name:
+                              - font-size: 20px
+                              - font-weight: bold
+                            card:
+                              - font-size: 12px
+                              - font-weight: bold
+                              - background-color: white
+                              - color: black
+                          state:
+                            - value: "playing"
+                              styles:
+                                card:
+                                  - background-color: yellow
+                          tap_action:
+                            action: call-service
+                            service: media_player.media_pause
+                            service_data:
+                              entity_id: media_player.marley_room
+
+                  # TestApp Button
+
+                  # - type: "custom:button-card"
+                  #   entity: app.test_app
+                  #   icon: mdi:flash
+                  #   card_size: 1
+                  #   name: Test app.test_app entity
+                  #   color_type: card
+                  #   show_state: true
+                  #   styles:
+                  #     name:
+                  #       - font-size: 20px
+                  #       - font-weight: bold
+                  #     card:
+                  #       - font-size: 12px
+                  #       - font-weight: bold
+                  #       - background-color: orange
+                  #   tap_action:
+                  #     action: call-service
+                  #     service: mqtt.publish
+                  #     service_data:
+                  #       #  topic: "mq_test_button"
+                  #       topic: 'app.test_app/triggered'
+                  #       payload: |
+                  #         {
+    "TestPayload": "anything"
+  }
+                #
+                # Component: Seattle Weather & Thermostat
+                #
+                - type: custom:stack-in-card
+                  cards:
+                    - type: markdown
+                      content: |
+                        # Seattle
+                        ## Weather
+                    - type: weather-forecast
+                      entity: weather.seattle # NWS: weather.kbfi_daynight
+                      show_forecast: true
+                      secondary_info_attribute: precipitation
+                    - type: markdown
+                      content: |
+                        ---
+                        ## Thermostat
+                    - type: custom:simple-thermostat
+                      entity: climate.seattle
+                      step_layout: column
+                      icon: true
+                      control: true
+                      name: false
+                      decimals: 0
+                      style: |
+                        .sensor-value {
+                          font-size: 30px;
+                          font-weight: 900;
+  }
+
+                        ha-card {
+                          --st-font-size-xl: 30px;
+
+                #
+                # Component: Entities
+                #
+                - type: entities
+                  title: Outside Lights
+                  entities:
+                    - entity: group.front
+                    - entity: group.back
+                    - entity: group.outside
+                  style: |
+                    ha-card {
+                      background-color: #2babf0;
+                      color: black;
+    }
+                    .card-content {
+                      background: rgba(0,
+      0,
+      0,
+      0.3);
+                      font-size: 1.3em;
+    }
+
+                #
+                # Component: All Entities
+                #
+                - type: custom:auto-entities
+                  card:
+                    type: glance
+                    show_state: false
+                    columns: 3
+                    title: All Lights & Switches
+                  filter:
+                    include:
+                      - domain: light
+                        options:
+                          tap_action:
+                            action: toggle
+                          hold_action:
+                            action: more-info
+                          double_tap_action:
+                            action: more-info
+                      - domain: switch
+                        options:
+                          tap_action:
+                            action: toggle
+                          hold_action:
+                            action: more-info
+                          double_tap_action:
+                            action: more-info
+                    exclude:
+                      - entity_id: "*wallmote*" # Wallmote
+                  sort:
+                    method: name
+                    ignore_case: true
+
+
+            ##################################################################
+            ##################################################################
+            ##################################################################
+
+            #
+            # View: Details
+            #
+            - title: Details
+              path: Details
+              badges:
+                - entity: sensor.seattle_temperature
+                - entity: sensor.cabin_temperature
+                - entity: sensor.gym_temperature
+                - entity: sensor.tv_room_temperature
+                - entity: sun.sun
+              cards:
+                #
+                # Component: Thermostats
+                #
+                - type: custom:stack-in-card
+                  cards:
+                    - type: markdown
+                      content: |
+                        # Thermostats
+                    - type: custom:simple-thermostat
+                      entity: climate.seattle
+                      step_layout: column
+                      decimals: 0
+                    - type: custom:simple-thermostat
+                      name: Haven
+                      entity: climate.cabin
+                      step_layout: column
+                      decimals: 0
+                    - type: custom:simple-thermostat
+                      entity: climate.master_bath_floor_heater
+                      name: Haven Floor
+                      step_layout: column
+                      decimals: 0
+                    - type: custom:simple-thermostat
+                      entity: climate.gym
+                      step_layout: column
+                      decimals: 0
+                    - type: custom:simple-thermostat
+                      entity: climate.tv_room
+                      step_layout: column
+                      decimals: 0
+
+                #
+                # Component: All Entities
+                #
+                - type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_state: false
+                    title: Entities
+                  filter:
+                    include:
+                      - domain: light
+                      - domain: switch
+                      - domain: lock
+                    exclude:
+                      - entity_id: "*wallmote*" # Wallmote
+                  sort:
+                    method: name
+                    ignore_case: true
+
+                #
+                # States
+                #
+                - type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_state: false
+                    show_name: false
+                    title: States
+                  filter:
+                    include:
+                      - domain: "input_boolean"
+                      - domain: "input_select"
+                    exclude:
+                      - entity_id: "*autoclimate_turn_heat_off"
+                      - entity_id: "*trigger*"
+                  sort:
+                    method: name
+                    ignore_case: true
+
+                #
+                # App States
+                #
+                - type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_state: false
+                    show_name: false
+                    title: App States
+                  filter:
+                    include:
+                      - domain: "app"
+                  sort:
+                    method: name
+                    ignore_case: true
+
+                #
+                # Component: Sonos
+                #
+                - type: custom:stack-in-card
+                  cards:
+                    - type: markdown
+                      content: |
+                        # Sonos
+                    - type: media-control
+                      entity: media_player.family_room
+                    - type: media-control
+                      entity: media_player.kestrel_room
+                    - type: media-control
+                      entity: media_player.living_room
+                    - type: media-control
+                      entity: media_player.marley_room
+                    - type: media-control
+                      entity: media_player.office
+                    - type: media-control
+                      entity: media_player.tv_room
+
+            ##################################################################
+            ##################################################################
+            ##################################################################
+
+            #
+            # View: Details
+            #
+            - title: History
+              path: History
+              badges:
+              cards:
+                #
+                # Component: Temperature History
+                #
+                - type: custom:stack-in-card
+                  cards:
+                    - type: markdown
+                      content: |
+                        # Temperature History (1 week)
+                    - type: history-graph
+                      title: Seattle
+                      hours_to_show: 168
+                      entities:
+                        - sensor.seattle_temperature
+                    - type: history-graph
+                      title: Haven
+                      hours_to_show: 168
+                      entities:
+                        - sensor.cabin_temperature
+                    - type: history-graph
+                      title: Gym
+                      hours_to_show: 168
+                      entities:
+                        - sensor.gym_temperature
+                    - type: history-graph
+                      title: TV Room
+                      hours_to_show: 168
+                      entities:
+                        - sensor.tv_room_temperature
+                    - type: history-graph
+                      title: Bathroom Floor
+                      hours_to_show: 168
+                      entities:
+                        - sensor.master_bath_floor_heater_temperature
+                #
+                # Component: Temperature History Using Autoclimate Sensors
+                #
+                - type: custom:stack-in-card
+                  cards:
+                    - type: markdown
+                      content: |
+                        # Temperature History (1 week)
+                    - type: history-graph
+                      title: Seattle
+                      hours_to_show: 168
+                      entities:
+                        - sensor.autoclimate_seattle_temperature
+                    - type: history-graph
+                      title: Haven
+                      hours_to_show: 168
+                      entities:
+                        - sensor.autoclimate_cabin_temperature
+                    - type: history-graph
+                      title: Gym
+                      hours_to_show: 168
+                      entities:
+                        - sensor.autoclimate_gym_temperature
+                    - type: history-graph
+                      title: TV Room
+                      hours_to_show: 168
+                      entities:
+                        - sensor.autoclimate_tv_room_temperature
+                    - type: history-graph
+                      title: Bathroom Floor
+                      hours_to_show: 168
+                      entities:
+                        - sensor.autoclimate_master_bath_floor_heater_temperature
+                #
+
+                #
+                # Component: Key Entity History
+                #
+                - type: custom:auto-entities
+                  card:
+                    type: history-graph
+                    hours_to_show: 168
+                    show_state: false
+                    title: Entity History (1 week)
+                  filter:
+                    include:
+                      - domain: light
+                      - domain: switch
+                      - domain: lock
+                    exclude:
+                      - entity_id: "*wallmote*" # Wallmote
+                  sort:
+                    method: name
+                    ignore_case: true
+
+                #
+                # Component: Occpancy History
+                #
+                - type: custom:auto-entities
+                  card:
+                    type: history-graph
+                    hours_to_show: 168
+                    show_state: false
+                    title: Haven History (1 week)
+                  filter:
+                    include:
+                      - entity_id: "binary_sensor.*_occupancy"
+                  sort:
+                    method: name
+                    ignore_case: true{
+      "config": {
+        "step": {
+          "on_supervisor": {
+            "title": "Select connection method",
+            "description": "Do you want to use the OpenZWave Supervisor add-on?",
+            "data": {
+              "use_addon": "Use the OpenZWave Supervisor add-on"
+            }
+          },
+          "install_addon": {
+            "title": "The OpenZWave add-on installation has started"
+          },
+          "start_addon": {
+            "title": "Enter the OpenZWave add-on configuration",
+            "data": {
+              "usb_path": "[%key:common::config_flow::data::usb_path%]",
+              "network_key": "Network Key"
+            }
+          },
+          "hassio_confirm": {
+            "title": "Set up OpenZWave integration with the OpenZWave add-on"
+          }
+        },
+        "abort": {
+          "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+          "already_in_progress": "[%key:common::config_flow::abort::already_in_progress%]",
+          "addon_info_failed": "Failed to get OpenZWave add-on info.",
+          "addon_install_failed": "Failed to install the OpenZWave add-on.",
+          "addon_set_config_failed": "Failed to set OpenZWave configuration.",
+          "single_instance_allowed": "[%key:common::config_flow::abort::single_instance_allowed%]",
+          "mqtt_required": "The MQTT integration is not set up"
+        },
+        "error": {
+          "addon_start_failed": "Failed to start the OpenZWave add-on. Check the configuration."
+        },
+        "progress": {
+          "install_addon": "Please wait while the OpenZWave add-on installation finishes. This can take several minutes."
+        }
+      }
+    }
