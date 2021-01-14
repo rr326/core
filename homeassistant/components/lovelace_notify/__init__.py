@@ -26,6 +26,8 @@ async def add_message(hass: HomeAssistant):
     cur_state = hass.states.get(STATE_ENTITY)
     cur_attributes = dict(cur_state.attributes) if cur_state else {}
     new_attributes = create_attributes(attributes=cur_attributes)
+    # Take last 5
+    new_attributes = {k: v for (k, v) in list(new_attributes.items())[-5:]}
 
     hass.states.async_set(
         STATE_ENTITY,
