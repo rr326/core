@@ -3,72 +3,46 @@ import asyncio
 import datetime as dt
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
+import voluptuous as vol
 
-from .const import DOMAIN
+from homeassistant.components import websocket_api
+import homeassistant.helpers.config_validation as cv
+
+from .const import DOMAIN, WS_TYPE_MESSAGE
 import asyncio
 
-# TODO List the platforms that you want to support.
-# For your initial PR, limit it to 1 platform.
-PLATFORMS = ["app"]
-STATE_ENTITY = f"{DOMAIN}.state"
+
+SCHEMA_WEBSOCKET_MESSAGE = websocket_api.BASE_COMMAND_MESSAGE_SCHEMA.extend(
+    {"type": WS_TYPE_MESSAGE, "message": str, "wait": vol.Coerce(float)}
+)
 
 
-def create_attributes(attributes, text=None):
-    now = dt.datetime.now()
-    if not text:
-        text = f"Message: {now.isoformat()}"
-    attributes[now.isoformat()] = text
-    return attributes
-
-
-async def add_message(hass: HomeAssistant):
-    cur_state = hass.states.get(STATE_ENTITY)
-    cur_attributes = dict(cur_state.attributes) if cur_state else {}
-    new_attributes = create_attributes(attributes=cur_attributes)
-    # Take last 5
-    new_attributes = {k: v for (k, v) in list(new_attributes.items())[-5:]}
-
-    hass.states.async_set(
-        STATE_ENTITY,
-        f"{dt.datetime.now()}",
-        attributes=new_attributes,
+async def send_message(hass):
+    print("### ll_notify: send_message:  ll_notify/message")
+    hass.bus.async_fire(
+        event_type="ll_notify/message",
+        event_data={"message": "Send Message Every 5 Seconds", "wait": 10},
     )
-    print(f"#### lovelace_notify attributes: {new_attributes}")
+
     await asyncio.sleep(5)
-    asyncio.create_task(add_message(hass))
+    await asyncio.create_task(send_message(hass))
+
+
+@callback
+def websocket_handle_message(hass, connection, msg):
+    print(f"\n##ws_handle_message: {msg}\n")
+    connection.send_message(
+        websocket_api.result_message(
+            msg["id"], {"response": "success", "orig_msg": msg}
+        )
+    )
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
-    """Set up the Lovelace Notify component."""
-    asyncio.create_task(add_message(hass))
-    return True
-
-
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Set up Lovelace Notify from a config entry."""
-    # TODO Store an API object for your platforms to access
-    # hass.data[DOMAIN][entry.entry_id] = MyApi(...)
-
-    for component in PLATFORMS:
-        hass.async_create_task(
-            hass.config_entries.async_forward_entry_setup(entry, component)
-        )
-
-    return True
-
-
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Unload a config entry."""
-    unload_ok = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, component)
-                for component in PLATFORMS
-            ]
-        )
+    hass.components.websocket_api.async_register_command(
+        WS_TYPE_MESSAGE, websocket_handle_message, SCHEMA_WEBSOCKET_MESSAGE
     )
-    if unload_ok:
-        hass.data[DOMAIN].pop(entry.entry_id)
+    hass.async_add_job(send_message(hass))
 
-    return unload_ok
+    return True
