@@ -1,0 +1,9 @@
+success:
+  description: Signal notification (success) to front end
+  fields:
+    message:
+      description: Text of notification
+      example: "Thermostat successfully turned on!"
+    wait:
+      description: (Optional) Time (in seconds) to wait before the message is dismissed, a value of 0 means keep open till clicked.
+      example: 3
