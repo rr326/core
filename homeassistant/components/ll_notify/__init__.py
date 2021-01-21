@@ -18,6 +18,6 @@ from .services import setup_services
 async def async_setup(hass: HomeAssistant, config: dict):
     await setup_services(hass, config)
 
-    hass.async_add_job(test.send_every_five(hass))
+    # hass.async_add_job(test.send_every_five(hass))
 
     return True
