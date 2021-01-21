@@ -17,7 +17,7 @@ def ws_send_message(hass, event_type: str, event_data: dict) -> bool:
     if not event_type.startswith(DOMAIN):
         event_type = f"{DOMAIN}/{event_type}"
 
-    print(f"### ll_notify: send_message: {event_type}")
+    print(f"### ll_notify: send_message: {event_type} -- {event_data}")
     hass.bus.fire(
         event_type=event_type,
         event_data=event_data,
