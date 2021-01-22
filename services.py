@@ -16,7 +16,7 @@ async def setup_services(hass, config):
         This allows you to have a button or action that does "ll_notify/success" in the UI
         and have that trigger the front end to run a success notification.
         """
-        print(f"## handle_{event_type}. data: {call.data}")
+        print(f"SERVICE: {event_type}. data: {call.data}")
         ws_send_message(hass, event_type=event_type, event_data=call.data)
 
     ws_events = [
@@ -29,7 +29,7 @@ async def setup_services(hass, config):
     ]
     for event_type in ws_events:
         handler = partial(handle_generic_ws_call, event_type)
-        print(f"Registering websocket listener: {event_type:12} ==> {handler}")
+        print(f"REGISTER LISTENER: {event_type:12} ==> {handler}")
         hass.services.async_register(DOMAIN, event_type, handler)
 
     #
@@ -38,7 +38,7 @@ async def setup_services(hass, config):
     def handle_get_defaults(call):
         """ Handle ll_notify/get_defaults """
         defaults = config.get(DOMAIN, {}).get("defaults")
-        print(f"## handle_get_defaults called. defaults: f{defaults}")
+        print(f"SERVICE: get_defaults --  f{defaults}")
         ws_send_message(hass, event_type="get_defaults", event_data=defaults)
 
     hass.services.async_register(DOMAIN, "get_defaults", handle_get_defaults)
@@ -48,7 +48,7 @@ async def setup_services(hass, config):
     #
     def handle_ping(call):
         """ Handle ll_notify/ping """
-        print(f"## handle_ping called.")
+        print(f"SERVICE: ping")
         ws_send_message(hass, event_type="ping", event_data=call.data)
 
     hass.services.async_register(DOMAIN, "ping", handle_ping)
@@ -58,7 +58,7 @@ async def setup_services(hass, config):
     #
     def handle_fire_event(call):
         """ Handle ll_notify/fire_event """
-        print(f"## handle_fire_event called. event_data: {call.data}")
+        print(f"SERVICE: fire_event {call.data}")
 
         if "event_name" not in call.data:
             print(f"### ERROR - No event_name in fire_event. {call.data}")
