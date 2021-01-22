@@ -1,7 +1,7 @@
 from .const import DOMAIN
 
 
-def ws_send_message(hass, event_type: str, event_data: dict) -> bool:
+def ws_send_message(hass, event_type: str, event_data) -> bool:
     """
     Send a websocket message
 
@@ -20,6 +20,6 @@ def ws_send_message(hass, event_type: str, event_data: dict) -> bool:
     print(f"### ll_notify: send_message: {event_type} -- {event_data}")
     hass.bus.fire(
         event_type=event_type,
-        event_data=event_data,
+        event_data=dict(event_data),  # event_data is a mappingproxy!
     )
     return True
