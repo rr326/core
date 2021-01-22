@@ -17,7 +17,7 @@ def ws_send_message(hass, event_type: str, event_data) -> bool:
     if not event_type.startswith(DOMAIN):
         event_type = f"{DOMAIN}/{event_type}"
 
-    print(f"### ll_notify: send_message: {event_type} -- {event_data}")
+    print(f"WS-OUT: {event_type} -- {event_data}")
     hass.bus.fire(
         event_type=event_type,
         event_data=dict(event_data),  # event_data is a mappingproxy!
