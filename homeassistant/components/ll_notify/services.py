@@ -25,6 +25,9 @@ async def setup_services(hass, config):
         "warning",
         "message",
         "notify",
+        "alert",
+        "confirm",
+        "prompt",
         "dismiss_all",
     ]
     for event_type in ws_events:
