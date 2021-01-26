@@ -10,4 +10,4 @@
 * Making the screen recording gif:
     1. Screen capture: Sh-Cmd-5
     2. Imovie
-    3. `ffmpeg -i ll_notify.mp4 -filter:v scale=720:-1   -f gif - | gifsicle --optimize=3 --delay=3 > out.gif`
+    3. `ffmpeg -i ~/Desktop/ll_notify.mp4 -filter:v scale=720:-1   -f gif - | gifsicle --optimize=3 --delay=3 > screenshot.gif`
