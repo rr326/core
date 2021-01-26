@@ -13,7 +13,8 @@
         "--debug",
         "-c",
         "config"
-      ]
+      ],
+      "preLaunchTask": "Remove HomeAssistant DB"
     },
     {
       // Debug by attaching to local Home Asistant server using Remote Python Debugger.
