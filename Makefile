@@ -29,7 +29,7 @@ build:
 	@echo "Build Frontend"
 	cd js ; npm run build
 
-screenshot.gif: ~/Desktop/ll_notify.mp4
-	ffmpeg -i ~/Desktop/ll_notify.mp4 -vf "fps=15,scale=640:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"  -loop 0 screenshot.gif
+screenshot.gif: tmp/screen_recording.mov
+	ffmpeg -i tmp/screen_recording.mov -vf "fps=15,scale=640:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"  -loop 0 screenshot.gif
 	ls -lh screenshot.gif
 
