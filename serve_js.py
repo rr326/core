@@ -5,13 +5,15 @@ This trick is taken from here:
 https://github.com/thomasloven/hass-browser_mod/blob/master/custom_components/browser_mod/mod_view.py
 """
 
-from aiohttp import web
-from homeassistant.components.http import HomeAssistantView
 import logging
+
+from aiohttp import web
+
+from homeassistant.components.http import HomeAssistantView
 
 _LOGGER = logging.getLogger(__name__)
 
-from .const import FRONTEND_SCRIPT_URL, DATA_EXTRA_MODULE_URL, VIEW_NAME, SCRIPT_PATH
+from .const import DATA_EXTRA_MODULE_URL, FRONTEND_SCRIPT_URL, SCRIPT_PATH, VIEW_NAME
 
 
 async def auto_load_ll_notify_js(hass, config):

@@ -1,6 +1,7 @@
-from .ws_out import ws_send_message
-from .const import DOMAIN
 from functools import partial
+
+from .const import DOMAIN
+from .ws_out import ws_send_message
 
 DEFAULT_MESSAGE = "DEFAULT MESSAGE - You are probably not calling this properly!"
 
