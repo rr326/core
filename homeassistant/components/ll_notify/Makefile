@@ -28,3 +28,6 @@ build:
 	@echo "\n*************"
 	@echo "Build Frontend"
 	cd js ; npm run build
+
+screenshot: ~/Desktop/ll_notify.mp4
+	ffmpeg -i ~/Desktop/ll_notify.mp4 -filter:v scale=600:-1 -r 15  -f gif -loop -1 screenshot.gif

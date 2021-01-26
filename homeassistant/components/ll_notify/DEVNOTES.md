@@ -10,4 +10,8 @@
 * Making the screen recording gif:
     1. Screen capture: Sh-Cmd-5
     2. Imovie
-    3. `ffmpeg -i ~/Desktop/ll_notify.mp4 -filter:v scale=720:-1   -f gif - | gifsicle --optimize=3 --delay=3 > screenshot.gif`
+    3. Transform
+    ```
+    ffmpeg -i ~/Desktop/ll_notify.mp4 -filter:v scale=600:-1 -r 15  -f gif -loop -1 screenshot.gif
+    ```
+* Notes - you need .gitattributes to make sure git realizes gifs are binary!
