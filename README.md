@@ -4,7 +4,8 @@ ll_notify is a Home Assistant component that allows you to easily add notificati
 
 ll_notify is basically thin wrapper on top of the Javascript framework [AlertifyJS](https://alertifyjs.com/). It has a backend (python) component, auto-loads to the front-end, and has a JS wrapper in UI. You can trigger a notification by calling a backend service.
 
-![screen recording](https://github.com/rr326/ha_ll_notify/blob/master/screenshot.gif)
+<!-- ![screen recording](screenshot.gif) -->
+<img src="screenshot.gif" width="500px" alt="screenshot">
 
 ## Status: Alpha
 This is still in development mode. I'm trying to decide if I should do a PR to HACore (to become a builtin component) or if it should be a custom component.
