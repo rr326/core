@@ -2,7 +2,7 @@
 
 ll_notify is a Home Assistant component that allows you to easily add notifications and alerts to a Lovelace dashboard.
 
-ll_notify is basically thin wrapper on top of the Javascript framework [AlertifyJS](https://alertifyjs.com/). It has a backend (python) component, auto-loads to the front-end, and has a JS wrapper in UI. You can trigger a notification by calling a backend service.
+ll_notify is basically thin wrapper on top of the Javascript framework [AlertifyJS](https://alertifyjs.com/). It has a backend (python) component, auto-loads to the front-end, and has a JS wrapper in the Lovlace user interface. You can trigger a notification by calling a backend service. (eg: `call-service: ll_notify/success`)
 
 ![screen recording](screenshot.gif)
 
@@ -85,12 +85,12 @@ Alertify uses callbacks after a notification is dismissed, or after a confim dia
 
 1. `call_service` - Call a hass service
 2. `fire_event` - Fire a hass event
-3. `js_fire_event` - Fire a Javascript event, solely in the ui.
+3. `js_fire_event` - Fire a Javascript event, solely in the browser.
 
 You can trigger one action, or multiple actions. See the example dashboard above.
 
 ## Missing Alertify features
-I have NOT implemented every Alertify feature. I'm not sure it would be possible or even useful.
+I have NOT implemented every Alertify feature. I'm not sure it would be useful to do so.
 
 Alertify's [notifications](https://alertifyjs.com/notifier.html) are implemented fully and are quite easy to use.
 
