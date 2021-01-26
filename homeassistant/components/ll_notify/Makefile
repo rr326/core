@@ -7,13 +7,11 @@ help:
 	@echo
 
 push_ll_notify:
-	@echo "NOT WORKING. Try ll_notify_subtree2 branch. Maybe that will work"
-	exit 1
 	@echo "\n*************"
 	@echo "components/ll_notify - Split and push"
-	cd ../../.. ; git subtree split --prefix homeassistant/components/ll_notify --annotate '(split) ' --rejoin --branch ll_notify_subtree
-	cd ../../.. ; git push ll_notify_origin ll_notify_subtree:master
-
+	cd ../../.. ; \
+		git subtree split --prefix homeassistant/components/ll_notify --annotate '(split) ' --rejoin --branch ll_notify_subtree2 ; \
+		git push -f ll_notify_origin ll_notify_subtree2:master
 clean:
 	@echo "Reformat all code"
 
