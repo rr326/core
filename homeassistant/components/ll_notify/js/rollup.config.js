@@ -1,14 +1,11 @@
-import resolve from "@rollup/plugin-node-resolve";
-import globals from "rollup-plugin-node-globals";
-import builtins from "rollup-plugin-node-builtins";
-import babel from "@rollup/plugin-babel";
-import serve from "rollup-plugin-serve";
-import json from "@rollup/plugin-json";
-import commonjs from "@rollup/plugin-commonjs";
-import postcss from "rollup-plugin-postcss";
-import { terser } from "rollup-plugin-terser";
+import resolve from "@rollup/plugin-node-resolve"
+import serve from "rollup-plugin-serve"
+import json from "@rollup/plugin-json"
+import commonjs from "@rollup/plugin-commonjs"
+import postcss from "rollup-plugin-postcss"
+import { terser } from "rollup-plugin-terser" // eslint-disable-line no-unused-vars
 
-const dev = process.env.ROLLUP_WATCH;
+const dev = process.env.ROLLUP_WATCH // eslint-disable-line no-undef
 
 const servopts = {
   contentBase: "./dist",
@@ -18,7 +15,7 @@ const servopts = {
   headers: {
     "Access-Control-Allow-Origin": "*",
   },
-};
+}
 
 export default {
   input: ["src/ll_notify.js"],
@@ -34,17 +31,11 @@ export default {
     postcss({
       plugins: [],
     }),
-    babel({
-      exclude: "node_modules/**",
-      babelHelpers: 'bundled'
-    }),
     commonjs({
       esmExternals: true,
       transformMixedEsModules: true,
     }),
-    globals(),
-    builtins(),
     dev && serve(servopts),
     // !dev && terser()
   ],
-};
+}
