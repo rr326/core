@@ -1,14 +1,6 @@
 [
     {
         "type": "Directory",
-        "name": "/workspaces/hacore/homeassistant/components/lovelace_notify",
-        "parent_id": null,
-        "workspaceRoot": "/workspaces/hacore",
-        "workspacePath": "homeassistant/components/lovelace_notify",
-        "id": "KUwGN80n5EzadqJZ"
-    },
-    {
-        "type": "Directory",
         "name": "/workspaces/hacore/config",
         "parent_id": null,
         "workspaceRoot": "/workspaces/hacore",
@@ -17,18 +9,18 @@
     },
     {
         "type": "Directory",
-        "name": "/workspaces/hacore/tests/components/lovelace_notify",
-        "parent_id": null,
-        "workspaceRoot": "/workspaces/hacore",
-        "workspacePath": "tests/components/lovelace_notify",
-        "id": "GvAVrm9hcEkDBsWn"
-    },
-    {
-        "type": "Directory",
         "name": "/workspaces/hacore/homeassistant/components/websocket_api",
         "parent_id": null,
         "workspaceRoot": "/workspaces/hacore",
         "workspacePath": "homeassistant/components/websocket_api",
         "id": "dzIxoNeSYnwBUTGv"
+    },
+    {
+        "type": "Directory",
+        "name": "/workspaces/hacore/homeassistant/components/ll_notify",
+        "parent_id": null,
+        "workspaceRoot": "/workspaces/hacore",
+        "workspacePath": "homeassistant/components/ll_notify",
+        "id": "q9jThcIiapoCKNgu"
     }
 ]
