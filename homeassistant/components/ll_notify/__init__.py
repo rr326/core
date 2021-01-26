@@ -1,20 +1,10 @@
 """The Lovelace Notify integration."""
-import asyncio
-import datetime as dt
 
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, callback
-import voluptuous as vol
+from homeassistant.core import HomeAssistant
 
-from homeassistant.components import websocket_api
-import homeassistant.helpers.config_validation as cv
-
-from .const import DOMAIN, WS_TYPE_MESSAGE
-import asyncio
-from . import test
-from .services import setup_services
-from .ws_out import ws_send_message
+from .const import DOMAIN
 from .serve_js import auto_load_ll_notify_js
+from .services import setup_services
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
