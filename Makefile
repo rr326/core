@@ -1,5 +1,3 @@
-.ONESHELL
-
 .PHONY: help
 help:
 	@echo
@@ -9,6 +7,7 @@ help:
 	@echo
 
 push_ll_notify:
+	@echo "\n*************"
 	@echo "components/ll_notify - Split and push"
 	cd ../../..
 	git subtree split --prefix homeassistant/components/ll_notify --annotate '(split) ' --rejoin --branch ll_notify_subtree
@@ -16,15 +15,17 @@ push_ll_notify:
 
 clean:
 	@echo "Reformat all code"
+
+	@echo "\n*************"
 	@echo "Reformat python"
 	autoflake --in-place --remove-all-unused-imports --remove-unused-variables --recursive  --exclude "js" .
 	isort  --multi-line 2 --skip js .
 	black  --exclude 'js/' .
+	@echo "\n*************"
 	@echo "Reformat JS"
-	cd js
-	npm run fix
+	cd js ; npm run fix
 
 build:
+	@echo "\n*************"
 	@echo "Build Frontend"
-	cd js
-	npm run build
+	cd js ; npm run build
