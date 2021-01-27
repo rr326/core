@@ -7095,6 +7095,12 @@ function subscribeConfirmEvents(hassConn) {
   }, `ll_notify/confirm`);
 }
 
+function subscribePingEvent(hassConn) {
+  hassConn.subscribeEvents((event) => {
+    console.log(`ll_notify/ping. Data: ${event.data} `);
+  }, "ll_notify/ping");
+}
+
 function set_globals() {
   // for debugging
   window.hass = document.querySelector("home-assistant").hass;
@@ -7152,6 +7158,7 @@ getHassConn()
     subscribeNotifyEvents(hassConn);
     subscribeAlertEvents(hassConn);
     subscribeConfirmEvents(hassConn);
+    subscribePingEvent(hassConn);
   })
   .then(() => {
     console.log('ll_notify: Successfully loaded.');

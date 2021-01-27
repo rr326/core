@@ -5,6 +5,7 @@ import { doSetDefaults } from "./setDefaults"
 import { subscribeNotifyEvents } from "./notify"
 import { subscribeAlertEvents } from "./alert"
 import { subscribeConfirmEvents } from "./confirm"
+import { subscribePingEvent } from './ping'
 import * as debug from "./debug"
 import {getHassConn} from './getHassConn'
 
@@ -37,6 +38,7 @@ getHassConn()
     subscribeNotifyEvents(hassConn)
     subscribeAlertEvents(hassConn)
     subscribeConfirmEvents(hassConn)
+    subscribePingEvent(hassConn)
   })
   .then(() => {
     console.log('ll_notify: Successfully loaded.')
