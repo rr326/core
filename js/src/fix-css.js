@@ -19,24 +19,20 @@
 
 export function fixCSS() {
   try {
-    let textColor = getComputedStyle(
-      document.getElementsByTagName("home-assistant")[0]
-    )
-      .getPropertyValue("--text-primary-color")
-      .trim()
-
-    if (textColor == "#ffffff") {
-      // If white, set to black
-      textColor = "#000000"
-    }
+    let defaultColor="black",
+      defaultBackground = "#BFC9CA" // gray
 
     const newStyle = `
         .alertify {
-            color: ${textColor};
+            color: ${defaultColor};
         }
 
         .alertify-notifier {
-            color: ${textColor};
+          color: ${defaultColor};
+        }
+
+        .ajs-message {
+          background-color: ${defaultBackground};
         }
     `
 

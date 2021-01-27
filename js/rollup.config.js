@@ -36,6 +36,6 @@ export default {
       transformMixedEsModules: true,
     }),
     dev && serve(servopts),
-    !dev && terser(),
+    // !dev && terser(),
   ],
 }

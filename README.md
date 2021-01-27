@@ -14,9 +14,18 @@ As a custom component, it's probably pretty close to prime-time. But for a built
 
 
 ## Installation
-Currently this is implemented as built-in component of a forked version of HA. Alternatively you could download the code and put it in `config/custom_components/ll_notify`.
+```bash
+cd config/custom_components
+git clone git@github.com:rr326/ha_ll_notify.git ll_notify
+echo "Please restart Home Assitant"
+```
+### Test it
+In your Home Assistant Dashboard, got to Developer Tools > Services. Under services, select "ll_notify.success". Click "Fill Example Data" from the box below. Then click the "Call Service" button. If a notification appears on the screen, you are set.
 
-### Config
+If not, in your dashboard open your browser [developer tools](https://balsamiq.com/support/faqs/browserconsole/) window. At the top of the window you should see something like, 'll_notify: Successfully loaded.' If not, make sure you installed it properly. Check your HA logs. Or file an issue here.
+
+
+## Config
 ```yaml
 # config/configuration.yaml
 
