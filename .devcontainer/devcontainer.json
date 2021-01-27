@@ -4,13 +4,18 @@
   "dockerFile": "../Dockerfile.dev",
   "postCreateCommand": "mkdir -p config && pip3 install -e .",
   "appPort": 8123,
-  "runArgs": ["-e", "GIT_EDITOR=code --wait"],
+  "runArgs": [
+    "-e",
+    "GIT_EDITOR=code --wait"
+  ],
   "extensions": [
     "ms-python.vscode-pylance",
     "visualstudioexptteam.vscodeintellicode",
     "ms-azure-devops.azure-pipelines",
     "redhat.vscode-yaml",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "ms-vscode.azure-account",
+    "dbaeumer.vscode-eslint"
   ],
   // Please keep this file in sync with settings in home-assistant/.vscode/settings.default.json
   "settings": {
@@ -18,11 +23,17 @@
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.formatting.provider": "black",
-    "python.testing.pytestArgs": ["--no-cov"],
+    "python.testing.pytestArgs": [
+      "--no-cov"
+    ],
     "python.testing.pytestEnabled": true,
     "editor.formatOnPaste": false,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "eslint.validate": [
+      "javascript"
+    ],
     "files.trimTrailingWhitespace": true,
     "terminal.integrated.shell.linux": "/bin/bash",
     "yaml.customTags": [
