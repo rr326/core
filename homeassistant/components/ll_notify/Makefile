@@ -9,9 +9,11 @@ help:
 push_ll_notify:
 	@echo "\n*************"
 	@echo "components/ll_notify - Split and push"
-	cd ../../.. ; \
-		git subtree split --prefix homeassistant/components/ll_notify --annotate '(split) ' --rejoin --branch ll_notify_subtree2 ; \
-		git push -f ll_notify_origin ll_notify_subtree2:master
+	@echo "\n\nFIX THIS"
+	exit 1
+	# cd ../../.. ; \
+	# 	git subtree split --prefix homeassistant/components/ll_notify --annotate '(split) ' --rejoin --branch ll_notify_subtree2 ; \
+	# 	git push -f ll_notify_origin ll_notify_subtree2:master
 clean:
 	@echo "Reformat all code"
 
