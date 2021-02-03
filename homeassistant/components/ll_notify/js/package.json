@@ -1,7 +1,7 @@
 {
-  "name": "notify-card",
+  "name": "ll_notify",
   "version": "0.0.1",
-  "description": "Lovelace notify-card",
+  "description": "Home Assistant ll_notify component front end",
   "keywords": [
     "home-assistant",
     "homeassistant",
@@ -11,7 +11,7 @@
     "custom-cards"
   ],
   "module": "notify-card.js",
-  "repository": "git@github.com:rr326/lovelace_notify_card.git",
+  "repository": "https://github.com/rr326/ha_ll_notify.git",
   "author": "Ross Rosen <rrosen326@gmail.com>",
   "license": "MIT",
   "dependencies": {

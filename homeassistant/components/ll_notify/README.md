@@ -1,4 +1,4 @@
-# Lovelace Notify
+# ll_notify
 
 ll_notify is a Home Assistant component that allows you to easily add notifications and alerts to a Lovelace dashboard.
 

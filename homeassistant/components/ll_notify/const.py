@@ -1,4 +1,4 @@
-"""Constants for the Lovelace Notify integration."""
+"""Constants"""
 from pathlib import Path
 
 DOMAIN = "ll_notify"

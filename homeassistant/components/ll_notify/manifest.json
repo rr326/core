@@ -1,8 +1,8 @@
 {
-  "domain": "lovelace_notify",
-  "name": "Lovelace Notify",
+  "domain": "ll_notify",
+  "name": "ll_notify",
   "config_flow": false,
-  "documentation": "https://www.home-assistant.io/integrations/lovelace_notify",
+  "documentation": "https://www.home-assistant.io/integrations/ll_notify",
   "requirements": [],
   "ssdp": [],
   "zeroconf": [],
