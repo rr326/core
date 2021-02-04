@@ -1,20 +1,19 @@
+import "./css/default.css"
 import "./css/alertify.css"
 
-import { fixCSS } from "./fix-css"
 import { doSetDefaults } from "./setDefaults"
 import { subscribeNotifyEvents } from "./notify"
 import { subscribeAlertEvents } from "./alert"
 import { subscribeConfirmEvents } from "./confirm"
-import { subscribePingEvent } from './ping'
+import { subscribePingEvent } from "./ping"
 import * as debug from "./debug"
-import {getHassConn} from './getHassConn'
+import { getHassConn } from "./getHassConn"
 
 import alertify from "alertifyjs"
 window.alertify = alertify // Needed as a window global
-fixCSS()
 
 let hassConn = null
-console.log('ll_notify: loading...')
+console.log("ll_notify: loading...")
 
 /**
  * Initialize alertify & websocket listeners
@@ -24,7 +23,7 @@ getHassConn()
     hassConn = conn
     return hassConn
   })
-  .then((hassConn)=>{
+  .then((hassConn) => {
     return hassConn.subscribeEvents(doSetDefaults, "ll_notify/get_defaults")
   })
   .then(() => {
@@ -41,7 +40,7 @@ getHassConn()
     subscribePingEvent(hassConn)
   })
   .then(() => {
-    console.log('ll_notify: Successfully loaded.')
+    console.log("ll_notify: Successfully loaded.")
     // debugging
     debug.set_globals()
     // debug.do_5sec_test();
