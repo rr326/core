@@ -41,13 +41,13 @@ export function handleActions(eventConfig) {
   let config = eventConfig instanceof Array ? eventConfig : [eventConfig]
   let hassConn = document.querySelector("home-assistant").hass.connection
 
-  config.forEach(cfg => {
+  config.forEach((cfg) => {
     _handleAction(hassConn, cfg)
   })
 }
 
 /**
- * Returns bool. Will not thow.
+ * Returns bool. Will not throw.
  * Will log errors to console.
  * Will try alertify.error() (But catch errors.)
  * @param {*} config
@@ -102,9 +102,9 @@ function _handleAction(hassConn, config) {
           type: "call_service",
           domain: config.domain,
           service: config.service,
-          service_data: config.service_data
+          service_data: config.service_data,
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("FAIL: call_service", err)
         })
       break
@@ -116,10 +116,10 @@ function _handleAction(hassConn, config) {
           service: "fire_event",
           service_data: {
             event_name: config.event_name,
-            event_data: config.event_data
-          }
+            event_data: config.event_data,
+          },
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("FAIL: fire_event", err)
         })
       break

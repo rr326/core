@@ -15,5 +15,5 @@
  *  1. Would have to send value from front to back and back to front.
  *     Usually this would be null and ugly.
  *  2. Would you need validation? Would it be useful without?
- *  3. Would there be a better way to do this with scripts, differnt event_data, etc?
+ *  3. Would there be a better way to do this with scripts, different event_data, etc?
  */

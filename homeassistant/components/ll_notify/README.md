@@ -1,3 +1,7 @@
+# TODO
+* Lovelace documentation:  "https://www.home-assistant.io/integrations/lovelace_notify",
+* Tests
+
 # ll_notify
 
 ll_notify is a Home Assistant component that allows you to easily add notifications and alerts to a Lovelace dashboard.
@@ -17,7 +21,7 @@ As a custom component, it's probably pretty close to prime-time. But for a built
 ```bash
 cd config/custom_components
 git clone git@github.com:rr326/ha_ll_notify.git ll_notify
-echo "Please restart Home Assitant"
+echo "Please restart Home Assistant"
 ```
 ### Test it
 In your Home Assistant Dashboard, got to Developer Tools > Services. Under services, select "ll_notify.success". Click "Fill Example Data" from the box below. Then click the "Call Service" button. If a notification appears on the screen, you are set.
