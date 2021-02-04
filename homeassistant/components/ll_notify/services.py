@@ -1,3 +1,5 @@
+"""ll_notify public services."""
+
 from functools import partial
 
 from .const import DOMAIN
@@ -7,17 +9,18 @@ DEFAULT_MESSAGE = "DEFAULT MESSAGE - You are probably not calling this properly!
 
 
 async def setup_services(hass, config):
+    """Register all ll_notify services."""
 
     #
     # success, error, warning, message, notify, dismiss_all
     #
     async def handle_generic_ws_call(event_type, call):
-        """
+        """Handle certain websocket calls.
+
         Just pass through the websocket data back to the websocket.
         This allows you to have a button or action that does "ll_notify/success" in the UI
         and have that trigger the front end to run a success notification.
         """
-        print(f"SERVICE: {event_type}. data: {call.data}")
         ws_send_message(hass, event_type=event_type, event_data=call.data)
         return True
 
@@ -33,16 +36,14 @@ async def setup_services(hass, config):
     ]
     for event_type in ws_events:
         handler = partial(handle_generic_ws_call, event_type)
-        print(f"REGISTER LISTENER: {event_type:12} ==> {handler}")
         hass.services.async_register(DOMAIN, event_type, handler)
 
     #
     # get_defaults
     #
     async def handle_get_defaults(call):
-        """ Handle ll_notify/get_defaults """
+        """Handle ll_notify/get_defaults."""
         defaults = config.get(DOMAIN, {}).get("defaults")
-        print(f"SERVICE: get_defaults --  f{defaults}")
         ws_send_message(hass, event_type="get_defaults", event_data=defaults)
         return True
 
@@ -52,11 +53,9 @@ async def setup_services(hass, config):
     # ping
     #
     async def handle_ping(call):
-        """ Handle ll_notify/ping """
-        print(f"SERVICE: ping")
+        """Handle ll_notify/ping."""
         ws_send_message(hass, event_type="ping", event_data=call.data)
         return True
-
 
     hass.services.async_register(DOMAIN, "ping", handle_ping)
 
@@ -64,11 +63,9 @@ async def setup_services(hass, config):
     # fire_event
     #
     async def handle_fire_event(call):
-        """ Handle ll_notify/fire_event """
-        print(f"SERVICE: fire_event {call.data}")
+        """Handle ll_notify/fire_event."""
 
         if "event_name" not in call.data:
-            print(f"### ERROR - No event_name in fire_event. {call.data}")
             return
         hass.bus.async_fire(call.data["event_name"], call.data.get("event_data"))
         return True

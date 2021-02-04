@@ -1,12 +1,14 @@
-from .const import DOMAIN
-from typing import Optional
+"""Send WebSocket Message."""
 from types import MappingProxyType
+from typing import Optional
+
+from .const import DOMAIN
 
 
-
-def ws_send_message(hass, event_type: str, event_data: Optional[MappingProxyType]) -> bool:
-    """
-    Send a websocket message
+def ws_send_message(
+    hass, event_type: str, event_data: Optional[MappingProxyType]
+) -> bool:
+    """Send a websocket message.
 
     event_type = SUB event.
     eg: event_type = "success", websocket event = "ll_notify/success"
@@ -25,9 +27,5 @@ def ws_send_message(hass, event_type: str, event_data: Optional[MappingProxyType
     else:
         data = dict(event_data)
 
-    print(f"WS-OUT: {event_type} -- {data}")
-    hass.bus.fire(
-        event_type=event_type,
-        event_data=data
-    )
+    hass.bus.fire(event_type=event_type, event_data=data)
     return True

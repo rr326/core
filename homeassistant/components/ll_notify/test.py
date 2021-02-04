@@ -1,14 +1,11 @@
+"""Interactive Testing Support."""
 import asyncio
 
 from .const import DOMAIN
 
 
 async def send_every_five(hass):
-    print("### TEST: from server")
-    # hass.bus.async_fire(
-    #     event_type="ll_notify/success",
-    #     event_data={"message": "Send Message Every 5 Seconds", "wait": 10},
-    # )
+    """Send a test message every 5 seconds."""
     await hass.services.async_call(
         DOMAIN, "success", {"message": "TEST: from SERVER", "wait": 5}
     )
