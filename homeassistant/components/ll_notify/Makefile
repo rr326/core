@@ -14,17 +14,22 @@ push_ll_notify:
 	# cd ../../.. ; \
 	# 	git subtree split --prefix homeassistant/components/ll_notify --annotate '(split) ' --rejoin --branch ll_notify_subtree2 ; \
 	# 	git push -f ll_notify_origin ll_notify_subtree2:master
+
 clean:
 	@echo "Reformat all code"
-
-	@echo "\n*************"
-	@echo "Reformat python"
-	autoflake --in-place --remove-all-unused-imports --remove-unused-variables --recursive  --exclude "js" .
-	isort  --multi-line 2 --skip js .
-	black  --exclude 'js/' .
 	@echo "\n*************"
 	@echo "Reformat JS"
 	cd js ; npm run fix
+
+
+	@echo "\n*************"
+	@echo "Reformat python"
+	@echo "Don't do this yet - integrating with HACORE formatting process"
+	exit 1
+
+	autoflake --in-place --remove-all-unused-imports --remove-unused-variables --recursive  --exclude "js" .
+	isort  --multi-line 2 --skip js .
+	black  --exclude 'js/' 
 
 build:
 	@echo "\n*************"
