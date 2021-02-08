@@ -5,6 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Pytest ll_notify",
+      "type": "python",
+      "request": "launch",
+      "module": "py.test",
+      "args": ["/Users/rrosen/dev/hacore/tests/components/ll_notify"]
+    },
+    {
       "name": "Home Assistant",
       "type": "python",
       "request": "launch",

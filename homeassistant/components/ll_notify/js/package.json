@@ -8,7 +8,8 @@
     "hass",
     "automation",
     "lovelace",
-    "custom-cards"
+    "custom-cards",
+    "notify"
   ],
   "module": "notify-card.js",
   "repository": "https://github.com/rr326/ha_ll_notify.git",
