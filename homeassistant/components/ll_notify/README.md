@@ -1,8 +1,4 @@
-# TODO
-* Lovelace documentation:  "https://www.home-assistant.io/integrations/lovelace_notify",
-* Tests
-
-# ll_notify
+# Lovelace Notify / ll_notify
 
 ll_notify is a Home Assistant component that allows you to easily add notifications and alerts to a Lovelace dashboard.
 
@@ -10,26 +6,28 @@ ll_notify is basically thin wrapper on top of the Javascript framework [Alertify
 
 ![screen recording](screenshot.gif)
 
-
 ## Status: Alpha
+
 This is still in development mode. I'm trying to decide if I should do a PR to HACore (to become a builtin component) or if it should be a custom component.
 
 As a custom component, it's probably pretty close to prime-time. But for a builtin, it would require docs, code cleanup, more robust exception handling, and testing.
 
-
 ## Installation
+
 ```bash
 cd config/custom_components
 git clone git@github.com:rr326/ha_ll_notify.git ll_notify
 echo "Please restart Home Assistant"
 ```
+
 ### Test it
+
 In your Home Assistant Dashboard, got to Developer Tools > Services. Under services, select "ll_notify.success". Click "Fill Example Data" from the box below. Then click the "Call Service" button. If a notification appears on the screen, you are set.
 
 If not, in your dashboard open your browser [developer tools](https://balsamiq.com/support/faqs/browserconsole/) window. At the top of the window you should see something like, 'll_notify: Successfully loaded.' If not, make sure you installed it properly. Check your HA logs. Or file an issue here.
 
-
 ## Config
+
 ```yaml
 # config/configuration.yaml
 
@@ -40,6 +38,7 @@ ll_notify:  # required
 ```
 
 ### Dashboard
+
 ```yaml
 # In a dashboard
 
@@ -77,24 +76,28 @@ ll_notify:  # required
                 event_data:
                     field1: val1
 ```
+
 ### Elsewhere
 `ll_notify` exposes several services and you can trigger notifications wherever you like. See below.
 
 ## Exposed services
+
 DOMAIN: `ll_notify`
 
 ### Services
+
 * success
 * error
 * warning
 * message
 * notify
 * alert
-* confim
+* confirm
 * dismiss_all
 
 ## Actions / "callbacks"
-Alertify uses callbacks after a notification is dismissed, or after a confim dialog is accepted or rejected. ll_notify instead implements 3 types of actions:
+
+Alertify uses callbacks after a notification is dismissed, or after a confirm dialog is accepted or rejected. ll_notify instead implements 3 types of actions:
 
 1. `call_service` - Call a hass service
 2. `fire_event` - Fire a hass event
@@ -103,6 +106,7 @@ Alertify uses callbacks after a notification is dismissed, or after a confim dia
 You can trigger one action, or multiple actions. See the example dashboard above.
 
 ## Missing Alertify features
+
 I have NOT implemented every Alertify feature. I'm not sure it would be useful to do so.
 
 Alertify's [notifications](https://alertifyjs.com/notifier.html) are implemented fully and are quite easy to use.
@@ -110,4 +114,3 @@ Alertify's [notifications](https://alertifyjs.com/notifier.html) are implemented
 Aleritify's [alerts](https://alertifyjs.com/alert.html) and [confirm dialogs](https://alertifyjs.com/confirm.html) are also implemented. You can set all the properties by sending key:value pairs in `service_data`, but most of the methods are not implemented.
 
 Alertify's [prompt](https://alertifyjs.com/prompt.html) is not implemented at all. It is unclear that the benefit is worth the complications.
-
