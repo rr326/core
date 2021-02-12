@@ -1,0 +1,141 @@
+title: ll_notify Test
+views:
+  - title: ll_notify
+    badges: []
+    cards:
+      - type: markdown
+        content: |
+          # ll_notify Test Dashboard
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            title: Nofifications
+            cards:
+              - type: button
+                name: Permanent
+                tap_action:
+                  action: call-service
+                  service: ll_notify.success
+                  service_data:
+                    message: "Permanent Message"
+                    wait: 0
+              - type: button
+                name: Success
+                tap_action:
+                  action: call-service
+                  service: ll_notify.success
+                  service_data:
+                    message: "Test success"
+                    wait: 0
+              - type: button
+                name: Warning
+                tap_action:
+                  action: call-service
+                  service: ll_notify.warning
+                  service_data:
+                    message: "Test warning"
+                    wait: 0
+              - type: button
+                name: Error
+                tap_action:
+                  action: call-service
+                  service: ll_notify.error
+                  service_data:
+                    message: "Test error"
+                    wait: 0
+          - type: button
+            name: Dismiss All
+            tap_action:
+              action: call-service
+              service: ll_notify.dismiss_all
+              service_data:
+                message: "Test dismiss_all"
+                wait: 5
+
+          - type: horizontal-stack
+            title: Callbacks
+            cards:
+              - type: button
+                name: Success w/ callbacks
+                tap_action:
+                  action: call-service
+                  service: ll_notify.success
+                  service_data:
+                    message: "Success w/ callbacks"
+                    wait: 1
+                    after_close:
+                      - action: call_service
+                        domain: ll_notify
+                        service: ping
+                        service_data:
+                          field1: val1
+                      - action: fire_event
+                        event_name: fake_event
+                        event_data:
+                          field1: val1
+                      - action: js_fire_event
+                        event_name: fake_js_event
+                        event_data:
+                          field1: val1
+
+          - type: horizontal-stack
+            title: Alert & Confirm
+            cards:
+              - type: button
+                name: Alert
+                tap_action:
+                  action: call-service
+                  service: ll_notify.alert
+                  service_data:
+                    title: Alert Title
+                    message: "Test alert"
+                    after_close:
+                      - action: call_service
+                        domain: ll_notify
+                        service: ping
+                        service_data:
+                          field1: val1
+                      - action: fire_event
+                        event_name: fake_event
+                        event_data:
+                          field1: val1
+                      - action: js_fire_event
+                        event_name: fake_js_event
+                        event_data:
+                          field1: val1
+              - type: button
+                name: Confirm
+                tap_action:
+                  action: call-service
+                  service: ll_notify.confirm
+                  service_data:
+                    title: Alert Title
+                    message: "Test alert"
+                    after_ok:
+                      - action: call_service
+                        domain: ll_notify
+                        service: ping
+                        service_data:
+                          field1: val1
+                      - action: fire_event
+                        event_name: fake_event
+                        event_data:
+                          field1: val1
+                      - action: js_fire_event
+                        event_name: fake_js_event
+                        event_data:
+                          field1: val1
+                    after_cancel:
+                      - action: call_service
+                        domain: ll_notify
+                        service: ping
+                        service_data:
+                          field1: val1
+                      - action: fire_event
+                        event_name: fake_event
+                        event_data:
+                          field1: val1
+                      - action: js_fire_event
+                        event_name: fake_js_event
+                        event_data:
+                          field1: val1
